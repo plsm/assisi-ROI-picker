@@ -120,8 +120,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>createROIMasksPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>BaseROIPicker</receiver>
+   <slot>createROIMasks()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>228</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>485</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>selectBackgroundImage()</slot>
+  <slot>createROIMasks()</slot>
  </slots>
 </ui>

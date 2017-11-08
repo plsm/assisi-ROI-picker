@@ -2,9 +2,11 @@
 #define ROIGOSTADIUMLONG_H
 
 #include <QGraphicsObject>
+#include "abstract-roi.hpp"
 
 class ROIGOStadiumLong:
-      public QGraphicsObject
+      public QGraphicsObject,
+      public AbstractROI
 {
 	Q_OBJECT
 public:
@@ -19,7 +21,7 @@ public:
 	virtual ~ROIGOStadiumLong ();
 	void paint (QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 	virtual QRectF boundingRect () const;
-	void save_masks (const std::string &folder, int width, int height) const;
+	virtual void save_masks (const std::string &folder, int width, int height) const;
 public slots:
 	void setCenter_x (int value);
 	void setCenter_y (int value);

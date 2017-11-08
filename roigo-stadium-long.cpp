@@ -1,9 +1,11 @@
+#include <iostream>
 #include <algorithm>
-#include <math.h>
 #include <QPainter>
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/core.hpp>
 
 #include "roigo-stadium-long.h"
+#include "trigonometry.h"
 
 void ROIGOStadiumLong::setCenter_x(int value)
 {
@@ -78,7 +80,7 @@ void ROIGOStadiumLong::paint (QPainter *painter, const QStyleOptionGraphicsItem 
 {
 	painter->setPen (Qt::black);
 //	painter->translate (-this->center_x, -this->center_y);
-	painter->rotate (this->angle);
+//	painter->rotate (this->angle);
 	painter->drawRoundedRect (
 	         this->center_x - this->length / 2, this->center_y - this->width / 2,
 	         this->length, this->width,
@@ -101,10 +103,167 @@ QRectF ROIGOStadiumLong::boundingRect () const
 	return QRectF (this->center_x - extend / 2, this->center_y - extend / 2,
 	               extend , extend);
 }
-/*
+
 void ROIGOStadiumLong::save_masks (const std::string &folder, int width, int height) const
 {
 	cv::Mat mask;
+	// first mask
 	mask = cv::Mat::zeros (height, width, CV_8UC1);
-
-}*/
+	cv::ellipse (
+	         mask,
+	         cv::Point2i (
+	            this->center_x + (this->length / 2 - this->width / 2) * cosd (this->angle + 180),
+	            this->center_y + (this->length / 2 - this->width / 2) * sind (this->angle + 180)
+	            ),
+	         cvSize (this->width / 2, this->width / 2),
+	         0,
+	         this->angle + 90,
+	         this->angle + 270,
+	         cv::Scalar (255, 0, 0, 0),
+	         -1);
+	const cv::Point points_1 [] = {
+	   cv::Point2i (
+	      this->center_x
+	      + (this->length / 2 - this->width / 2) * cosd (this->angle + 180)
+	      + this->width / 2 * cosd (this->angle + 270),
+	      this->center_y
+	      + (this->length / 2 - this->width / 2) * sind (this->angle + 180)
+	      + this->width / 2 * sind (this->angle + 270)
+	      ),
+	   cv::Point2i (
+	      this->center_x
+	      + (this->length / 2 - this->width / 2) * cosd (this->angle + 180)
+	      + this->width / 2 * cosd (this->angle + 90),
+	      this->center_y
+	      + (this->length / 2 - this->width / 2) * sind (this->angle + 180)
+	      + this->width / 2 * sind (this->angle + 90)
+	      ),
+	   cv::Point2i (
+	      this->center_x
+	      + (this->length / 2 - this->border_1_2) * cosd (this->angle + 180)
+	      + this->width / 2 * cosd (this->angle + 90),
+	      this->center_y
+	      + (this->length / 2 - this->border_1_2) * sind (this->angle + 180)
+	      + this->width / 2 * sind (this->angle + 90)
+	      ),
+	   cv::Point2i (
+	      this->center_x
+	      + (this->length / 2 - this->border_1_2) * cosd (this->angle + 180)
+	      + this->width / 2 * cosd (this->angle + 270),
+	      this->center_y
+	      + (this->length / 2 - this->border_1_2) * sind (this->angle + 180)
+	      + this->width / 2 * sind (this->angle + 270)
+	      )
+	};
+	cv::fillConvexPoly (
+	         mask,
+	         points_1,
+	         4,
+	         cv::Scalar (255, 0, 0, 0),
+	         0);
+	if (!cv::imwrite (folder + "/Mask-1.png", mask)) {
+		std::cerr << "Problems writing file\n" << folder << "/mask-1.png\n";
+	}
+	// second mask
+	mask = cv::Mat::zeros (height, width, CV_8UC1);
+	const cv::Point points_2 [] = {
+	   cv::Point2i (
+	      this->center_x
+	      + (-this->length / 2 + this->border_1_2) * cosd (this->angle)
+	      + this->width / 2 * cosd (this->angle + 90),
+	      this->center_y
+	      + (-this->length / 2 + this->border_1_2) * sind (this->angle)
+	      + this->width / 2 * sind (this->angle + 90)
+	      ),
+	   cv::Point2i (
+	      this->center_x
+	      + (-this->length / 2 + this->border_1_2) * cosd (this->angle)
+	      - this->width / 2 * cosd (this->angle + 90),
+	      this->center_y
+	      + (-this->length / 2 + this->border_1_2) * sind (this->angle)
+	      - this->width / 2 * sind (this->angle + 90)
+	      ),
+	   cv::Point2i (
+	      this->center_x
+	      + (-this->length / 2 + this->border_2_3) * cosd (this->angle)
+	      - this->width / 2 * cosd (this->angle + 90),
+	      this->center_y
+	      + (-this->length / 2 + this->border_2_3) * sind (this->angle)
+	      - this->width / 2 * sind (this->angle + 90)
+	      ),
+	   cv::Point2i (
+	      this->center_x
+	      + (-this->length / 2 + this->border_2_3) * cosd (this->angle)
+	      + this->width / 2 * cosd (this->angle + 90),
+	      this->center_y
+	      + (-this->length / 2 + this->border_2_3) * sind (this->angle)
+	      + this->width / 2 * sind (this->angle + 90)
+	      )
+	};
+	cv::fillConvexPoly (
+	         mask,
+	         points_2,
+	         4,
+	         cv::Scalar (255, 0, 0, 0),
+	         0);
+	if (!cv::imwrite (folder + "/Mask-2.png", mask)) {
+		std::cerr << "Problems writing file\n" << folder << "/Mask-2.png\n";
+	}
+	// third mask
+	mask = cv::Mat::zeros (height, width, CV_8UC1);
+	cv::ellipse (
+	         mask,
+	         cv::Point2i (
+	            this->center_x + (this->length / 2 - this->width / 2) * cosd (this->angle),
+	            this->center_y + (this->length / 2 - this->width / 2) * sind (this->angle)
+	            ),
+	         cvSize (this->width / 2, this->width / 2),
+	         0,
+	         this->angle - 90,
+	         this->angle + 90,
+	         cv::Scalar (255, 0, 0, 0),
+	         -1);
+	const cv::Point points_3 [] = {
+	   cv::Point2i (
+	      this->center_x
+	      + (-this->length / 2 + this->border_2_3) * cosd (this->angle)
+	      - this->width / 2 * cosd (this->angle + 90),
+	      this->center_y
+	      + (-this->length / 2 + this->border_2_3) * sind (this->angle)
+	      - this->width / 2 * sind (this->angle + 90)
+	      ),
+	   cv::Point2i (
+	      this->center_x
+	      + (-this->length / 2 + this->border_2_3) * cosd (this->angle)
+	      + this->width / 2 * cosd (this->angle + 90),
+	      this->center_y
+	      + (-this->length / 2 + this->border_2_3) * sind (this->angle)
+	      + this->width / 2 * sind (this->angle + 90)
+	      ),
+	   cv::Point2i (
+	      this->center_x
+	      + (this->length / 2 - this->width / 2) * cosd (this->angle)
+	      + this->width / 2 * cosd (this->angle + 90),
+	      this->center_y
+	      + (this->length / 2 - this->width / 2) * sind (this->angle)
+	      + this->width / 2 * sind (this->angle + 90)
+	      ),
+	   cv::Point2i (
+	      this->center_x
+	      + (this->length / 2 - this->width / 2) * cosd (this->angle)
+	      - this->width / 2 * cosd (this->angle + 90),
+	      this->center_y
+	      + (this->length / 2 - this->width / 2) * sind (this->angle)
+	      - this->width / 2 * sind (this->angle + 90)
+	      )
+	};
+	cv::fillConvexPoly (
+	         mask,
+	         points_3,
+	         4,
+	         cv::Scalar (255, 0, 0, 0),
+	         0);
+	if (!cv::imwrite (folder + "/Mask-3.png", mask)) {
+		std::cerr << "Problems writing file\n" << folder << "/Mask-3.png\n";
+	}
+}

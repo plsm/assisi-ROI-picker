@@ -1,6 +1,8 @@
+#include <libgen.h>
 #include <QLabel>
 #include <QFormLayout>
 #include <opencv2/highgui/highgui.hpp>
+#include <iostream>
 
 #include "base-ROI-picker.h"
 #include "ui_base-ROI-picker.h"
@@ -11,8 +13,10 @@ BaseROIPicker::BaseROIPicker (QWidget *parent):
    QWidget(parent),
    scene (new QGraphicsScene ()),
    pixmap (new QGraphicsPixmapItem ()),
+   folder ("./"),
    ui (new Ui::BaseROIPicker),
-   file_dialog (new QFileDialog (this))
+   file_dialog (new QFileDialog (this)),
+   roigo (NULL)
 {
 	ui->setupUi(this);
 	ui->graphicsView->setScene (scene);
@@ -46,6 +50,16 @@ void BaseROIPicker::add_spin_box (const char *text, int min, int max, const QObj
 	this->spin_boxes [text] = spin_box;
 }
 
+void BaseROIPicker::set_roigo (AbstractROI *roigo)
+{
+	if (this->roigo == NULL) {
+		this->roigo = roigo;
+	}
+	else {
+		fprintf (stderr, "ROI picker already has a region of interest graphical object\n");
+	}
+}
+
 void BaseROIPicker::update_graphics (int)
 {
 	this->ui->graphicsView->update ();
@@ -71,10 +85,21 @@ void BaseROIPicker::selectBackgroundImage ()
 	int return_code = this->file_dialog->exec ();
 	if (return_code == QDialog::Accepted) {
 		QStringList strings = this->file_dialog->selectedFiles ();
-		this->set_image (strings.at (0).toStdString ());
+		std::string filename = strings.at (0).toStdString ();
+		this->set_image (filename);
+		char *copy = new char [filename.size ()];
+		strcpy (copy, filename.c_str ());
+		this->folder = dirname (copy);
+		delete copy;
 	}
 }
 
+void BaseROIPicker::createROIMasks ()
+{
+	std::cout << "void BaseROIPicker::createROIMasks ()\n";
+	std::cout << "[" << folder << "]\n";
+	this->roigo->save_masks (folder, this->image.size ().width, this->image.size ().height);
+}
 
 QImage Mat2QImage (const cv::Mat &image)
 {
