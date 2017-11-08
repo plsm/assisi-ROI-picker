@@ -78,9 +78,11 @@ ROIGOStadiumLong::~ROIGOStadiumLong ()
 
 void ROIGOStadiumLong::paint (QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
+	painter->save ();
 	painter->setPen (Qt::black);
-//	painter->translate (-this->center_x, -this->center_y);
-//	painter->rotate (this->angle);
+	painter->translate (this->center_x, this->center_y);
+	painter->rotate (this->angle);
+	painter->translate (-this->center_x, -this->center_y);
 	painter->drawRoundedRect (
 	         this->center_x - this->length / 2, this->center_y - this->width / 2,
 	         this->length, this->width,
@@ -94,7 +96,7 @@ void ROIGOStadiumLong::paint (QPainter *painter, const QStyleOptionGraphicsItem 
 	         this->center_x - this->length / 2 + this->border_2_3, this->center_y - this->width / 2,
 	         this->center_x - this->length / 2 + this->border_2_3, this->center_y + this->width / 2
 	         );
-//	painter->translate (this->center_x, this->center_y);
+	painter->restore ();
 }
 
 QRectF ROIGOStadiumLong::boundingRect () const
