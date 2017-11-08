@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <QPainter>
 #include <opencv2/highgui/highgui.hpp>
@@ -109,6 +110,7 @@ QRectF ROIGOStadiumLong::boundingRect () const
 void ROIGOStadiumLong::save_masks (const std::string &folder, int width, int height) const
 {
 	cv::Mat mask;
+	std::cout << "Saving masks to folder [" << folder << "]\n";
 	// first mask
 	mask = cv::Mat::zeros (height, width, CV_8UC1);
 	cv::ellipse (
@@ -166,6 +168,9 @@ void ROIGOStadiumLong::save_masks (const std::string &folder, int width, int hei
 	if (!cv::imwrite (folder + "/Mask-1.png", mask)) {
 		std::cerr << "Problems writing file\n" << folder << "/mask-1.png\n";
 	}
+	else {
+		std::cout << "  saved first mask\n";
+	}
 	// second mask
 	mask = cv::Mat::zeros (height, width, CV_8UC1);
 	const cv::Point points_2 [] = {
@@ -210,6 +215,9 @@ void ROIGOStadiumLong::save_masks (const std::string &folder, int width, int hei
 	         0);
 	if (!cv::imwrite (folder + "/Mask-2.png", mask)) {
 		std::cerr << "Problems writing file\n" << folder << "/Mask-2.png\n";
+	}
+	else {
+		std::cout << "  saved second mask\n";
 	}
 	// third mask
 	mask = cv::Mat::zeros (height, width, CV_8UC1);
@@ -268,4 +276,22 @@ void ROIGOStadiumLong::save_masks (const std::string &folder, int width, int hei
 	if (!cv::imwrite (folder + "/Mask-3.png", mask)) {
 		std::cerr << "Problems writing file\n" << folder << "/Mask-3.png\n";
 	}
+	else {
+		std::cout << "  saved third mask\n";
+	}
+}
+
+void ROIGOStadiumLong::save_properties (const std::string &folder) const
+{
+	std::cout << "Saving properties to folder [" << folder << "]\n";
+	std::string filename = folder + "/" + AbstractROI::ROI_PROPERTIES_FILENAME;
+	std::ofstream ofs (filename);
+	ofs << "center_x:" << this->center_x << '\n'
+	    << "center_x:" << this->center_x << '\n'
+	    << "angle:" << this->angle << '\n'
+	    << "width:" << this->width << '\n'
+	    << "length:" << this->length << '\n'
+	    << "border_1_2:" << this->border_1_2 << '\n'
+	    << "border_2_3:" << this->border_2_3 << '\n';
+	ofs.close ();
 }

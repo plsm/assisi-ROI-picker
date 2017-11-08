@@ -22,6 +22,7 @@ public:
 	void paint (QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 	virtual QRectF boundingRect () const;
 	virtual void save_masks (const std::string &folder, int width, int height) const;
+	virtual void save_properties (const std::string &folder) const;
 public slots:
 	void setCenter_x (int value);
 	void setCenter_y (int value);

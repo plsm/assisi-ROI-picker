@@ -101,6 +101,7 @@ void BaseROIPicker::createROIMasks ()
 	std::cout << "void BaseROIPicker::createROIMasks ()\n";
 	std::cout << "[" << folder << "]\n";
 	this->roigo->save_masks (folder, this->image.size ().width, this->image.size ().height);
+	this->roigo->save_properties (folder);
 }
 
 QImage Mat2QImage (const cv::Mat &image)

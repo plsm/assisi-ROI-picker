@@ -5,8 +5,10 @@
 
 class AbstractROI
 {
-public:
+protected:
 	AbstractROI ();
+public:
+	static const std::string ROI_PROPERTIES_FILENAME;
 	/**
 	 * @brief save_masks Creates png files that represent the regions of interest
 	 * that the user selected. These png files are masks that are used to select
@@ -17,6 +19,13 @@ public:
 	 * @param height Height in pixels of the image
 	 */
 	virtual void save_masks (const std::string &folder, int width, int height) const = 0;
+	/**
+	 * @brief save_properties Saves the properties of the regions of interest that
+	 * the user selected to a file name roi.properties.
+	 *
+	 * @param folder The folder where the file named roi.properties is saved.
+	 */
+	virtual void save_properties (const std::string &folder) const = 0;
 };
 
 #endif // ABSTRACTROI_H
