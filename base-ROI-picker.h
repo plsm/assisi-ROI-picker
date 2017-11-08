@@ -29,7 +29,7 @@ public:
 	std::map<std::string, QSpinBox *> spin_boxes;
 	~BaseROIPicker();
 	void set_roigo (AbstractROI *roigo);
-	void add_spin_box (const char *label, int min, int max, const QObject *object, const char *slot);
+	void add_spin_box (const char *label, int value, int min, int max, const QObject *object, const char *slot);
 	void set_image (const std::string &image_filename);
 public slots:
 	void selectImage ();

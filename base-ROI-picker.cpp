@@ -35,13 +35,14 @@ void BaseROIPicker::set_image (const std::string &image_filename)
 	this->ui->graphicsView->update ();
 }
 
-void BaseROIPicker::add_spin_box (const char *text, int min, int max, const QObject *object, const char *slot)
+void BaseROIPicker::add_spin_box (const char *text, int value, int min, int max, const QObject *object, const char *slot)
 {
 	QLabel *label = new QLabel (this->ui->propertiesWidget);
 	label->setText (text);
 	label->setObjectName (text);
 	QSpinBox *spin_box = new QSpinBox (this->ui->propertiesWidget);
 	spin_box->setObjectName (text);
+	spin_box->setValue (value);
 	spin_box->setMinimum (min);
 	spin_box->setMaximum (max);
 	this->ui->formLayout->insertRow (this->ui->formLayout->rowCount () - 1, label, spin_box);
