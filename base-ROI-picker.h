@@ -32,7 +32,7 @@ public:
 	void add_spin_box (const char *label, int min, int max, const QObject *object, const char *slot);
 	void set_image (const std::string &image_filename);
 public slots:
-	void selectBackgroundImage ();
+	void selectImage ();
 	void createROIMasks ();
 	void update_graphics (int);
 private:

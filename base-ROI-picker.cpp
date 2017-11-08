@@ -15,7 +15,7 @@ BaseROIPicker::BaseROIPicker (QWidget *parent):
    pixmap (new QGraphicsPixmapItem ()),
    folder ("./"),
    ui (new Ui::BaseROIPicker),
-   file_dialog (new QFileDialog (this)),
+   file_dialog (new QFileDialog (NULL)),
    roigo (NULL)
 {
 	ui->setupUi(this);
@@ -77,7 +77,7 @@ void BaseROIPicker::update_graphics (int)
 //	}
 //}
 
-void BaseROIPicker::selectBackgroundImage ()
+void BaseROIPicker::selectImage ()
 {
 	this->file_dialog->setViewMode (QFileDialog::List);
 	this->file_dialog->setOption (QFileDialog::ShowDirsOnly, false);

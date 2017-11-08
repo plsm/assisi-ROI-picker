@@ -74,9 +74,9 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QPushButton" name="loadBackgroundImagePushButton">
+          <widget class="QPushButton" name="loadImagePushButton">
            <property name="text">
-            <string>load background image</string>
+            <string>load image</string>
            </property>
           </widget>
          </item>
@@ -105,22 +105,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>loadBackgroundImagePushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>BaseROIPicker</receiver>
-   <slot>selectBackgroundImage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>287</x>
-     <y>202</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>462</x>
-     <y>214</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>createROIMasksPushButton</sender>
    <signal>clicked()</signal>
    <receiver>BaseROIPicker</receiver>
@@ -136,9 +120,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>loadImagePushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>BaseROIPicker</receiver>
+   <slot>selectImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>298</x>
+     <y>203</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>508</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>selectBackgroundImage()</slot>
+  <slot>selectImage()</slot>
   <slot>createROIMasks()</slot>
  </slots>
 </ui>
