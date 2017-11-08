@@ -15,7 +15,6 @@ BaseROIPicker::BaseROIPicker (QWidget *parent):
    pixmap (new QGraphicsPixmapItem ()),
    folder ("./"),
    ui (new Ui::BaseROIPicker),
-   file_dialog (new QFileDialog (NULL)),
    roigo (NULL)
 {
 	ui->setupUi(this);
@@ -80,12 +79,14 @@ void BaseROIPicker::update_graphics (int)
 
 void BaseROIPicker::selectImage ()
 {
-	this->file_dialog->setViewMode (QFileDialog::List);
-	this->file_dialog->setOption (QFileDialog::ShowDirsOnly, false);
-	this->file_dialog->setFileMode (QFileDialog::ExistingFiles);
-	int return_code = this->file_dialog->exec ();
+	QFileDialog *file_dialog = new QFileDialog ();
+	file_dialog->setDirectory (this->folder.c_str ());
+	file_dialog->setViewMode (QFileDialog::List);
+	file_dialog->setOption (QFileDialog::ShowDirsOnly, false);
+	file_dialog->setFileMode (QFileDialog::ExistingFiles);
+	int return_code = file_dialog->exec ();
 	if (return_code == QDialog::Accepted) {
-		QStringList strings = this->file_dialog->selectedFiles ();
+		QStringList strings = file_dialog->selectedFiles ();
 		std::string filename = strings.at (0).toStdString ();
 		this->set_image (filename);
 		char *copy = new char [filename.size ()];

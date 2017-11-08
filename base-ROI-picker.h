@@ -38,7 +38,6 @@ public slots:
 private:
 	std::string folder;
 	Ui::BaseROIPicker *ui;
-	QFileDialog *file_dialog;
 	AbstractROI *roigo;
 };
 
