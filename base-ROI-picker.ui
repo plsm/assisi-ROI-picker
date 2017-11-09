@@ -94,6 +94,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QCheckBox" name="enhanceImageCheckBox">
+           <property name="text">
+            <string>enhance image</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>

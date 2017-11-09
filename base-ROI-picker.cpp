@@ -1,6 +1,7 @@
 #include <libgen.h>
 #include <QLabel>
 #include <QFormLayout>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 
@@ -30,7 +31,12 @@ BaseROIPicker::~BaseROIPicker()
 void BaseROIPicker::set_image (const std::string &image_filename)
 {
 	this->image = cv::imread (image_filename, CV_LOAD_IMAGE_GRAYSCALE);
-	this->pixmap->setPixmap (QPixmap::fromImage (Mat2QImage (this->image)));
+	cv::Mat displayed_image;
+	if (this->ui->enhanceImageCheckBox->isChecked ())
+		cv::equalizeHist (this->image, displayed_image);
+	else
+		displayed_image = this->image;
+	this->pixmap->setPixmap (QPixmap::fromImage (Mat2QImage (displayed_image)));
 	this->ui->graphicsView->update ();
 }
 
@@ -102,6 +108,19 @@ void BaseROIPicker::createROIMasks ()
 	std::cout << "[" << folder << "]\n";
 	this->roigo->save_masks (folder, this->image.size ().width, this->image.size ().height);
 	this->roigo->save_properties (folder);
+}
+
+void BaseROIPicker::on_enhanceImageCheckBox_toggled (bool checked)
+{
+	cv::Mat displayed_image;
+	 if (checked) {
+		 cv::equalizeHist (this->image, displayed_image);
+	 }
+	 else {
+		 displayed_image = this->image;
+	 }
+	 this->pixmap->setPixmap (QPixmap::fromImage (Mat2QImage (displayed_image)));
+	 this->ui->graphicsView->update ();
 }
 
 QImage Mat2QImage (const cv::Mat &image)

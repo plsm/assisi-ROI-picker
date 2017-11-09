@@ -35,6 +35,9 @@ public slots:
 	void selectImage ();
 	void createROIMasks ();
 	void update_graphics (int);
+private slots:
+	void on_enhanceImageCheckBox_toggled(bool checked);
+
 private:
 	std::string folder;
 	Ui::BaseROIPicker *ui;
