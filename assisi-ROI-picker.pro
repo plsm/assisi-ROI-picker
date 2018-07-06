@@ -29,15 +29,20 @@ SOURCES += main.cpp\
     base-ROI-picker.cpp \
     picker-stadium-long.cpp \
     roigo-stadium-long.cpp \
-    abstract-roi.cpp
+    abstract-roi.cpp \
+    roigo-stadium-standard.cpp \
+    picker-stadium-standard.cpp
 
 HEADERS  += \
     base-ROI-picker.h \
     picker-stadium-long.h \
     roigo-stadium-long.h \
     abstract-roi.hpp \
-    trigonometry.h
+    trigonometry.h \
+    roigo-stadium-standard.h \
+    picker-stadium-standard.h
 
 FORMS    += \
     base-ROI-picker.ui \
-    picker-stadium-long.ui
+    picker-stadium-long.ui \
+    picker-stadium-standard.ui
