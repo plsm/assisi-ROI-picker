@@ -18,6 +18,9 @@ ROIStadiumLong::ROIStadiumLong(QWidget *parent) :
 	ui->centralwidget->add_spin_box ("length", roigo->length, 0, 1000, roigo, SLOT (setLength (int)));
 	ui->centralwidget->add_spin_box ("border 1 2", roigo->border_1_2, 0, 1000, roigo, SLOT (setBorder_1_2 (int)));
 	ui->centralwidget->add_spin_box ("border 2 3", roigo->border_2_3, 0, 1000, roigo, SLOT (setBorder_2_3 (int)));
+	ui->centralwidget->add_textbox_mask_name ("Mask-1.png");
+	ui->centralwidget->add_textbox_mask_name ("Mask-2.png");
+	ui->centralwidget->add_textbox_mask_name ("Mask-3.png");
 }
 
 ROIStadiumLong::~ROIStadiumLong()

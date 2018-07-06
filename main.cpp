@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
 	return a.exec();
 }
-
+/*
 po::options_description program_options ()
 {
 	po::options_description result ("Create masks to do image processing.");
@@ -46,3 +46,4 @@ po::options_description program_options ()
 	         );
 	return result;
 }
+*/

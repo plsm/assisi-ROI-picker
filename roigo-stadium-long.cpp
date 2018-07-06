@@ -107,9 +107,10 @@ QRectF ROIGOStadiumLong::boundingRect () const
 	               extend , extend);
 }
 
-void ROIGOStadiumLong::save_masks (const std::string &folder, int width, int height) const
+void ROIGOStadiumLong::save_masks (const std::string &folder, int width, int height, const std::vector<std::string> names) const
 {
 	cv::Mat mask;
+	std::string filename;
 	std::cout << "Saving masks to folder [" << folder << "]\n";
 	// first mask
 	mask = cv::Mat::zeros (height, width, CV_8UC1);
@@ -165,8 +166,9 @@ void ROIGOStadiumLong::save_masks (const std::string &folder, int width, int hei
 	         4,
 	         cv::Scalar (255, 0, 0, 0),
 	         0);
-	if (!cv::imwrite (folder + "/Mask-1.png", mask)) {
-		std::cerr << "Problems writing file\n" << folder << "/mask-1.png\n";
+	filename = this->mask_filename (folder, "Mask-1.png", names, 0);
+	if (!cv::imwrite (filename, mask)) {
+		std::cerr << "Problems writing file\n" << filename << "\n";
 	}
 	else {
 		std::cout << "  saved first mask\n";
@@ -213,8 +215,9 @@ void ROIGOStadiumLong::save_masks (const std::string &folder, int width, int hei
 	         4,
 	         cv::Scalar (255, 0, 0, 0),
 	         0);
-	if (!cv::imwrite (folder + "/Mask-2.png", mask)) {
-		std::cerr << "Problems writing file\n" << folder << "/Mask-2.png\n";
+	filename = this->mask_filename (folder, "Mask-2.png", names, 1);
+	if (!cv::imwrite (filename, mask)) {
+		std::cerr << "Problems writing file\n" << filename << "\n";
 	}
 	else {
 		std::cout << "  saved second mask\n";
@@ -273,8 +276,9 @@ void ROIGOStadiumLong::save_masks (const std::string &folder, int width, int hei
 	         4,
 	         cv::Scalar (255, 0, 0, 0),
 	         0);
-	if (!cv::imwrite (folder + "/Mask-3.png", mask)) {
-		std::cerr << "Problems writing file\n" << folder << "/Mask-3.png\n";
+	filename = this->mask_filename (folder, "Mask-3.png", names, 2);
+	if (!cv::imwrite (filename, mask)) {
+		std::cerr << "Problems writing file\n" << filename << "\n";
 	}
 	else {
 		std::cout << "  saved third mask\n";

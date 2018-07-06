@@ -1,6 +1,7 @@
 #include <libgen.h>
 #include <QLabel>
 #include <QFormLayout>
+#include <QSizePolicy>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
@@ -56,6 +57,15 @@ void BaseROIPicker::add_spin_box (const char *text, int value, int min, int max,
 	this->spin_boxes [text] = spin_box;
 }
 
+void BaseROIPicker::add_textbox_mask_name (const char *name)
+{
+	QLineEdit *mask_name_edit = new QLineEdit (this->ui->maskNameFrame);
+	mask_name_edit->setText (name);
+	mask_name_edit->setSizePolicy (QSizePolicy::Minimum, QSizePolicy::Minimum);
+	this->ui->maskNameLayout->insertWidget (this->mask_name_edits.size () + 1, mask_name_edit);
+	this->mask_name_edits.insert (this->mask_name_edits.end (), mask_name_edit);
+}
+
 void BaseROIPicker::set_roigo (AbstractROI *roigo)
 {
 	if (this->roigo == NULL) {
@@ -106,7 +116,14 @@ void BaseROIPicker::createROIMasks ()
 {
 	std::cout << "void BaseROIPicker::createROIMasks ()\n";
 	std::cout << "[" << folder << "]\n";
-	this->roigo->save_masks (folder, this->image.size ().width, this->image.size ().height);
+	std::vector<std::string> names;
+	if (this->mask_name_edits.size () > 0 && !this->ui->useDefaultMaskFileNameCheckBox->isChecked ()) {
+		for (QLineEdit *le : this->mask_name_edits) {
+			names.insert (names.end (), le->text ().toStdString ());
+		}
+		std::cout << "Using provided names\n"  << names.size () << " " << names [0];
+	}
+	this->roigo->save_masks (folder, this->image.size ().width, this->image.size ().height, names);
 	this->roigo->save_properties (folder);
 }
 
